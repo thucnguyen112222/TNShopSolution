@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TNShopSolution.Utilities\TNShopSolution.Utilities.csproj" />
+    <ProjectReference Include="..\TNShopSulotion.Data\TNShopSulotion.Data.csproj" />
+    <ProjectReference Include="..\ViewModels\TNShopSolution.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Catalog\Products\Dtos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+   <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>

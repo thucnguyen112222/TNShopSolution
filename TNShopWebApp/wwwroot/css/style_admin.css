@@ -1,0 +1,15 @@
+﻿body {
+    background:#0026ff;
+}
+.swapper{
+    max-width:400px;
+    min-height:400px;
+    margin:auto;
+    border:1px solid #00ff90; 
+    border-radius:7px;
+    background:#ffffff;
+    margin-top:150px;
+}
+.checkbox11{
+    margin-left:30px;
+}
