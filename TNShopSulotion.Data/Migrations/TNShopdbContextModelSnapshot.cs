@@ -195,7 +195,7 @@ namespace TNShopSulotion.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "3223e706-81f3-43bc-a617-1774fcc71ce9",
+                            ConcurrencyStamp = "80792679-b29f-484d-acbf-595f5610b4ad",
                             Description = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -285,7 +285,7 @@ namespace TNShopSulotion.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "512370bd-faba-48d9-bce1-0eb3bca22a96",
+                            ConcurrencyStamp = "55c06314-aab9-46b3-8d6b-11f0eced1574",
                             DayofBridth = new DateTime(2020, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "thucnguyen5511@gmail.com",
                             EmailConfirmed = true,
@@ -294,7 +294,7 @@ namespace TNShopSulotion.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "thucnguyen5511@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA1k6SHL8UgK7b9GYcFL4owd4+Y84iNIPJ0n1x3vCHAYPCrP3bxXFtkI7YOzqV7QNw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEB5IWJ00vmCNWqHdld9Jr12qnXSggWsQy+pRmBuPuH8ydXzum/UY362d3351IUD9TQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -642,7 +642,7 @@ namespace TNShopSulotion.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 7, 29, 22, 33, 48, 29, DateTimeKind.Local).AddTicks(393),
+                            DateCreated = new DateTime(2021, 8, 6, 20, 51, 40, 488, DateTimeKind.Local).AddTicks(7791),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,

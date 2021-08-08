@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TNShopWebApp.Areas.Admin.Controllers
 {
     [Authorize]
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
         private readonly ILogger<DashboardController> _logger;
         public DashboardController(ILogger<DashboardController> logger)

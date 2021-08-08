@@ -7,7 +7,7 @@ using TNShopSolution.ViewModels.Common;
 
 namespace TNShopSolution.Application.Catalog.Products
 {
-    public interface IManagerProductSevice
+    public interface IProductSevice
     {
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductEditRequet request);
@@ -17,11 +17,13 @@ namespace TNShopSolution.Application.Catalog.Products
         bool UpdateStock(int ProductID, int Quantity);
         Task<ProductViewModel> GetById(int ProductId,string LanguageId);
         List<ProductViewModel> GetAll();
-        PageViewModel<ProductViewModel> GetAllPaging(GetManagerProductPagingRequest request);
+        PageResult<ProductViewModel> GetAllPaging(GetManagerProductPagingRequest request);
         Task<int> AddImage(int ProductId, ProductImageCreateRequest productImages);
         Task<int> UpdateImage( int ImgId, ProductImageUpdateRequest productImages);
         Task<int> DeleteImage(int ImgId);
         Task<ProductImageViewModel> GetImageById(int Id);
         Task<List<ProductImageViewModel>> GetListImages(int ProductId);
+        Task<PageResult<ProductViewModel>> GetAllCategoryById(string languageId, GetPublicProductPagingRequest request);
+
     }
 }

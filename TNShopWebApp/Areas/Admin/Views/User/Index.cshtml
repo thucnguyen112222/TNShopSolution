@@ -1,0 +1,65 @@
+﻿@using TNShopSolution.ViewModels.Common;
+@model PageResult<TNShopSolution.ViewModels.System.Users.UserViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card-header">
+    <div class="row">
+        <div class="col-md-7">
+            <strong class="text-danger text-uppercase">Danh sách người dùng</strong>
+        </div>
+        <div class="col-md-5 text-right">
+            <a href="~/Admin/user/create" class="btn-sm btn-success"><i class="fas fa-save" aria-hidden="true"></i>Thêm </a>
+            <a href="~/Admin/trash/trash" class="btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Thùng rác</a>
+        </div>
+    </div>
+</div>
+<div class="alert alert-@TempData.Peek("Type")" role="alert">
+    @TempData.Peek("Message")
+</div>
+@if (Model.Items != null)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Họ</th>
+                <th scope="col">Tên</th>
+                <th scope="col">Tài Khoản</th>
+                <th scope="col">Số điện thoại</th>
+                <th scope="col">Email</th>
+                <th scope="col">Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <th scope="row">@item.FirstName</th>
+                    <th scope="row">@item.LastName</th>
+                    <th scope="row">@item.UserName</th>
+                    <th scope="row">@item.PhoneNumber</th>
+                    <th scope="row">@item.Email</th>
+                    <td>
+                        <a href="@Url.Action("Details", "user", new { id = item.Id })" class="btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" title="Chi tiết">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                        <a href="@Url.Action("Update", "user", new { id = item.Id })" class="btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" title="Chỉnh sửa">
+                            <i class="fa fa-pen" aria-hidden="true"></i>
+                        </a>
+                        <a href="@Url.Action("Delete", "user", new { id = item.Id })" class="btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" title="Xóa">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        @await Component.InvokeAsync("Pager", Model);
+    </table>
+}
+else
+{
+    <h3>Null</h3>
+}

@@ -33,9 +33,8 @@ namespace TNShopSolution.BackendAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<TNShopdbContext>().AddDefaultTokenProviders();
-            services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IStorageService, StorageService>();
-            services.AddTransient<IManagerProductSevice, ManagerProductSevice>();
+            services.AddTransient<IProductSevice, ProductSevice>();
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();

@@ -16,12 +16,12 @@ using TNShopSulotion.Data.EntityFramework;
 
 namespace TNShopSolution.Application.Catalog.Products
 {
-    public class ManagerProductSevice : IManagerProductSevice
+    public class ProductSevice : IProductSevice
     {
         private readonly TNShopdbContext db;
 
         private readonly IStorageService _storageService;
-        public ManagerProductSevice(TNShopdbContext context, IStorageService storageService)
+        public ProductSevice(TNShopdbContext context, IStorageService storageService)
         {
             db = context;
             _storageService = storageService;
@@ -43,12 +43,12 @@ namespace TNShopSolution.Application.Catalog.Products
                 productImg.FileSize = request.ImageFile.Length;
             }
             db.ProductImages.Add(productImg);
-             await db.SaveChangesAsync();
+            await db.SaveChangesAsync();
             return productImg.Id;
         }
         public async Task<int> DeleteImage(int ImgId)
         {
-            var productImage =await db.ProductImages.FindAsync(ImgId);
+            var productImage = await db.ProductImages.FindAsync(ImgId);
             if (productImage == null)
                 throw new TNShopException($"cannot find image with id {ImgId}");
             db.ProductImages.Remove(productImage);
@@ -69,7 +69,7 @@ namespace TNShopSolution.Application.Catalog.Products
                 ProductId = i.ProductId,
             }).ToListAsync();
         }
-        public async Task<int> UpdateImage( int ImgId, ProductImageUpdateRequest request)
+        public async Task<int> UpdateImage(int ImgId, ProductImageUpdateRequest request)
         {
             var productImg = await db.ProductImages.FindAsync(ImgId);
             if (productImg == null)
@@ -152,7 +152,7 @@ namespace TNShopSolution.Application.Catalog.Products
         {
             throw new NotImplementedException();
         }
-        public PageViewModel<ProductViewModel> GetAllPaging(GetManagerProductPagingRequest request)
+        public PageResult<ProductViewModel> GetAllPaging(GetManagerProductPagingRequest request)
         {
             var query = from p in db.Products
                         join pt in db.ProductTranslations on p.Id equals pt.ProductId
@@ -187,7 +187,7 @@ namespace TNShopSolution.Application.Catalog.Products
                     ViewCount = x.p.ViewCount,
                 }).ToList();
 
-            var pageResult = new PageViewModel<ProductViewModel>
+            var pageResult = new PageResult<ProductViewModel>
             {
                 TotalRecord = totalRow,
                 Items = data
@@ -278,8 +278,8 @@ namespace TNShopSolution.Application.Catalog.Products
         }
         public async Task<ProductImageViewModel> GetImageById(int Id)
         {
-            var Image =  await db.ProductImages.FindAsync(Id);
-            if(Image != null)
+            var Image = await db.ProductImages.FindAsync(Id);
+            if (Image != null)
             {
                 ProductImageViewModel viewModel = new ProductImageViewModel()
                 {
@@ -298,7 +298,47 @@ namespace TNShopSolution.Application.Catalog.Products
             {
                 throw new TNShopException("cannot find with id {Id}");
             }
-            
         }
+        public async Task<PageResult<ProductViewModel>> GetAllCategoryById(string languageId, GetPublicProductPagingRequest request)
+        {
+            var query = from p in db.Products
+                        join pt in db.ProductTranslations on p.Id equals pt.ProductId
+                        join pic in db.ProductInCategories on p.Id equals pic.ProductId
+                        join c in db.Categories on pic.CategoryId equals c.Id
+                        where pt.LanguageId == languageId
+                        select new { p, pt, pic };
+
+            if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
+            {
+                query = query.Where(p => p.pic.CategoryId == request.CategoryId);
+            }
+            int totalRow = query.Count();
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.p.Id,
+                    Name = x.pt.Name,
+                    DateCreated = x.p.DateCreated,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.OriginalPrice,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                }).ToListAsync();
+
+            var pageResult = new PageResult<ProductViewModel>
+            {
+                TotalRecord = totalRow,
+                Items = data
+            };
+            return pageResult;
+        }
+
     }
 }

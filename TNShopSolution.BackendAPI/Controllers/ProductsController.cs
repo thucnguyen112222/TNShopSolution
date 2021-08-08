@@ -13,25 +13,23 @@ namespace TNShopSolution.BackendAPI.Controllers
     [Authorize]
     public class ProductsController : ControllerBase
     {
-        private readonly IPublicProductService _publicProductService;
-        private readonly IManagerProductSevice _managerProductService;
-        public ProductsController(IPublicProductService publicProductService, IManagerProductSevice managerProductSevice)
+        private readonly IProductSevice _ProductService;
+        public ProductsController( IProductSevice managerProductSevice)
         {
-            _managerProductService = managerProductSevice;
-            _publicProductService = publicProductService;
+            _ProductService = managerProductSevice;
         }
         //https://localhost:api/products?index=1&pagesize=10&categoryid=1
         [HttpGet("public-paging/{languageId}")]
         public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] GetPublicProductPagingRequest request)
         {
-            var product = await _publicProductService.GetAllCategoryById(languageId, request);
+            var product = await _ProductService.GetAllCategoryById(languageId, request);
             return Ok(product);
         }
         //https://localhost:api/product/1      
         [HttpGet("{ProductId}/{languageId}")]
         public async Task<IActionResult> GetById(int ProductId, string languageId)
         {
-            var product = await _managerProductService.GetById(ProductId, languageId);
+            var product = await _ProductService.GetById(ProductId, languageId);
             if (product == null)
             {
                 return BadRequest("canot find product");
@@ -45,10 +43,10 @@ namespace TNShopSolution.BackendAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var productId = await _managerProductService.Create(request);
+            var productId = await _ProductService.Create(request);
             if (productId == 0)
                 return BadRequest();
-            var product = await _managerProductService.GetById(productId, request.LanguageId);
+            var product = await _ProductService.GetById(productId, request.LanguageId);
             return CreatedAtAction(nameof(GetById), new { id = productId }, product);
         }
         [HttpPut]
@@ -58,7 +56,7 @@ namespace TNShopSolution.BackendAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _managerProductService.Update(request);
+            var result = await _ProductService.Update(request);
             if (result == 0)
             {
                 return BadRequest();
@@ -68,7 +66,7 @@ namespace TNShopSolution.BackendAPI.Controllers
         [HttpDelete("{productId}")]
         public async Task<IActionResult> Delete(int productId)
         {
-            var result = await _managerProductService.Delete(productId);
+            var result = await _ProductService.Delete(productId);
             if (result == 0)
             {
                 return BadRequest();
@@ -78,7 +76,7 @@ namespace TNShopSolution.BackendAPI.Controllers
         [HttpPatch("{id}/{newPrice}")]
         public async Task<IActionResult> UpdatePrice(int id, decimal newPrice)
         {
-            var result = await _managerProductService.UpdatePrice(id, newPrice);
+            var result = await _ProductService.UpdatePrice(id, newPrice);
             if (result == false)
             {
                 return BadRequest();
@@ -92,10 +90,10 @@ namespace TNShopSolution.BackendAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var imageId = await _managerProductService.AddImage(productId, request);
+            var imageId = await _ProductService.AddImage(productId, request);
             if (imageId == 0)
                 return BadRequest();
-            var image = await _managerProductService.GetImageById(imageId);
+            var image = await _ProductService.GetImageById(imageId);
             return CreatedAtAction(nameof(GetImageById), new { id = imageId }, image);
         }
         [HttpPost("{productId}/images/{imageId}")]
@@ -105,7 +103,7 @@ namespace TNShopSolution.BackendAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var resutl = await _managerProductService.UpdateImage(imageId, request);
+            var resutl = await _ProductService.UpdateImage(imageId, request);
             if (resutl == 0)
                 return BadRequest();
             return Ok();
@@ -117,7 +115,7 @@ namespace TNShopSolution.BackendAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var resutl = await _managerProductService.DeleteImage(imageId);
+            var resutl = await _ProductService.DeleteImage(imageId);
             if (resutl == 0)
                 return BadRequest();
 
@@ -126,7 +124,7 @@ namespace TNShopSolution.BackendAPI.Controllers
         [HttpGet("{productId}/images/{ImageId}")]
         public async Task<IActionResult> GetImageById(int productId, int ImageId)
         {
-            var img = await _managerProductService.GetImageById(ImageId);
+            var img = await _ProductService.GetImageById(ImageId);
             if (img == null)
             {
                 return BadRequest("canot find product");

@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,16 +29,21 @@ namespace TNShopWebApp
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = ("/admin/user/login");
+                    options.LoginPath = ("/admin/login/index");
                     options.AccessDeniedPath = ("/admin/user/forbidden");
 
                 });
             services.AddControllersWithViews().AddFluentValidation(
-                v => v.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>()); ;
+                v => v.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+            services.AddRazorPages();
+            services.AddSession(options=> {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
             services.AddDbContext<TNShopSulotion.Data.EntityFramework.TNShopdbContext>();
             services.AddDbContext<TNShopSulotion.Data.EntityFramework.TNShopdbContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("TNShop")));
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             IMvcBuilder builder = services.AddRazorPages();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIROMENT");
             if (environment == Environments.Development)
@@ -65,7 +71,7 @@ namespace TNShopWebApp
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(
